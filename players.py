@@ -1,10 +1,21 @@
+from abc import abstractmethod
+from abc import ABCMeta
+import random
+
 class Player:
+    __metaclass__ = ABCMeta
+
     def __init__(self, name):
         self.score = 0
         self.wickets = 2
         self.name = name
 
+    @abstractmethod
+    def play(self):
+        pass
 
+
+class Human(Player):
     def play(self):
         n = input("{}'s move: ".format(self.name))
         try:
@@ -13,5 +24,11 @@ class Player:
                 raise ValueError
         except ValueError:
             print("Please input a valid number")
+        return n
+
+class RandomBot(Player):
+    def play(self):
+        n = random.randint(0,6)
+        print("{}'s move: {}".format(self.name, n))
         return n
 
