@@ -1,3 +1,4 @@
+import argparse
 from players import Human, RandomBot
 
 class Game:
@@ -42,11 +43,48 @@ class Game:
                 exit()
 
 
-def _initialize_game():
-    player1 = RandomBot('Player1')
-    player2 = RandomBot('Player2Bot')
+def _initialize_game(args):
+    print(args)
+    player1 = Human('Player 1', args.n_wickets)
+    if args.play2:
+        player2 = Human('Player 2', args.n_wickets)
+    else:
+        player2 = RandomBot('PlayerBot 2', args.n_wickets)
+
     game = Game(player1, player2)
     return game
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Cricket')
+    parser.add_argument('--2player', dest="play2", action='store_true',
+                        help="play with 2 human players")
+    parser.add_argument('-w', '--wickets', dest="n_wickets", type=int,
+                        default=2, help="the number of wickets")
+
+    game = _initialize_game(parser.parse_args())
+    game.play()
+
+
+
+"""
+class Player:
+def __init__(self, name):
+    self.score = 0
+    self.wickets = 2
+    self.name = name
+
+
+def play(self):
+    n = input("{}'s move: ".format(self.name))
+    try:
+        n = int(n)
+        if not 0 <= n <=6:
+            raise ValueError
+        return n
+    except ValueError:
+        print("Please input a valid number")
+        return self.play()
+
 
 
 def game():
@@ -74,30 +112,4 @@ def game():
         if game.batter.score > game.bowler.score and game.bowler.wickets == 0:
             print("{} wins !".format(game.batter.name))
             exit()
-
-if __name__ == '__main__':
-    game = _initialize_game()
-    game.play()
-
-
-
-"""
-class Player:
-def __init__(self, name):
-    self.score = 0
-    self.wickets = 2
-    self.name = name
-
-
-def play(self):
-    n = input("{}'s move: ".format(self.name))
-    try:
-        n = int(n)
-        if not 0 <= n <=6:
-            raise ValueError
-        return n
-    except ValueError:
-        print("Please input a valid number")
-        return self.play()
-
 """

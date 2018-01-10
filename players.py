@@ -5,9 +5,9 @@ import random
 class Player:
     __metaclass__ = ABCMeta
 
-    def __init__(self, name):
+    def __init__(self, name, n_wickets):
         self.score = 0
-        self.wickets = 2
+        self.wickets = n_wickets
         self.name = name
 
     @abstractmethod
@@ -26,9 +26,9 @@ class Human(Player):
             print("Please input a valid number")
         return n
 
+
 class RandomBot(Player):
     def play(self):
         n = random.randint(0,6)
         print("{}'s move: {}".format(self.name, n))
         return n
-
