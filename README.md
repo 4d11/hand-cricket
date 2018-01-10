@@ -18,6 +18,6 @@ Each player can throw a number from 0 to 6.
 * If the batter hits a 0, their score will increase by the amount the bowler threw
 
 
-# Authors 
+## Authors 
 [4d11](https://github.com/4d11)
 
