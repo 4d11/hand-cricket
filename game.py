@@ -1,5 +1,5 @@
 import argparse
-from players import Human, RandomBot
+from players import Human, RandomBot, SmartBot
 
 class Game:
     def __init__(self, batter, bowler):
@@ -22,6 +22,9 @@ class Game:
             print(self)
             bat = self.batter.play()
             bowl = self.bowler.play()
+            self.bowler.track(bat)
+            self.batter.track(bowl)
+
             if bowl == bat:
                 print("out")
                 self.batter.wickets -= 1
@@ -33,7 +36,7 @@ class Game:
                             print("{} wins !".format(self.bowler.name))
                         exit()
                     else:
-                        self.batter, self.bowler = self.bowler, game.batter
+                        self.batter, self.bowler = self.bowler, self.batter
             elif bat == 0:
                 self.batter.score += bowl
             else:
@@ -44,22 +47,26 @@ class Game:
 
 
 def _initialize_game(args):
-    print(args)
     player1 = Human('Player 1', args.n_wickets)
     if args.play2:
         player2 = Human('Player 2', args.n_wickets)
+    elif args.smart:
+        player2 = SmartBot('PlayerBot 2', args.n_wickets)
     else:
         player2 = RandomBot('PlayerBot 2', args.n_wickets)
 
     game = Game(player1, player2)
     return game
 
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Cricket')
-    parser.add_argument('--2player', dest="play2", action='store_true',
+    players = parser.add_mutually_exclusive_group(required=True)
+    players.add_argument('--2player', dest="play2", action='store_true',
                         help="play with 2 human players")
+    players.add_argument('--smart', dest="smart", action='store_true',
+                        help="play against a smart computer")
     parser.add_argument('-w', '--wickets', dest="n_wickets", type=int,
                         default=2, help="the number of wickets")
-
     game = _initialize_game(parser.parse_args())
     game.play()
